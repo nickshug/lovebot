@@ -5,7 +5,6 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
 # --- Определение структуры проекта ---
-# Список путей, которые нужно создать. Папки заканчиваются на '/', файлы - нет.
 PROJECT_STRUCTURE = [
     "lovebot/",
     "lovebot/.env",
