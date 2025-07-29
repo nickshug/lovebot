@@ -12,12 +12,9 @@ load_dotenv(BASE_DIR / ".env")
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 TMDB_API_KEY = os.getenv("TMDB_API_KEY")
 
-# Проверяем, запущены ли мы на Render (там есть переменная RENDER)
 if os.getenv('RENDER'):
-    # Если да, используем путь к постоянному диску
     DB_PATH = Path("/data/lovebot.db")
 else:
-    # Иначе (на вашем компьютере) используем локальный путь
     DB_PATH = BASE_DIR / "lovebot.db"
 
 # Проверки на наличие токенов
