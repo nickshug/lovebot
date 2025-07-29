@@ -158,7 +158,6 @@ async def get_today_question_for_couple(couple_id: int):
         )
         return await cursor.fetchone()
 
-# --- НОВАЯ ФУНКЦИЯ ---
 async def get_qotd_archive(couple_id: int):
     """Получает весь архив ответов на вопросы дня для пары."""
     async with aiosqlite.connect(DB_PATH) as db:
