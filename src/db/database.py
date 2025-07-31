@@ -396,13 +396,12 @@ async def unbook_wish(wish_id: int):
         await db.execute("UPDATE wishlist SET booked_by_id = NULL WHERE wish_id = ?", (wish_id,))
         await db.commit()
 
-async def add_memory(couple_id: int, media_type: str, media_file_id: str, description: str):
+async def add_memory(couple_id: int, media_type: str, media_file_id: str, description: str, added_at: datetime.date):
     """Добавляет новое воспоминание."""
-    today = datetime.now().date()
     async with aiosqlite.connect(DB_PATH) as db:
         await db.execute(
             "INSERT INTO memories (couple_id, media_type, media_file_id, description, added_at) VALUES (?, ?, ?, ?, ?)",
-            (couple_id, media_type, media_file_id, description, today)
+            (couple_id, media_type, media_file_id, description, added_at)
         )
         await db.commit()
         logging.info(f"Для пары {couple_id} добавлено новое воспоминание.")

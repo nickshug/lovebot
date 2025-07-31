@@ -1,0 +1,29 @@
+2025-07-31 09:01:42,611 - INFO - root - Запускаю бота...
+2025-07-31 09:01:42,613 - INFO - root - База данных успешно инициализирована.
+2025-07-31 09:01:42,627 - INFO - root - Добавлено/обновлено 11 вопросов из файла.
+2025-07-31 09:01:42,788 - INFO - apscheduler.scheduler - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-07-31 09:01:42,789 - INFO - apscheduler.scheduler - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-07-31 09:01:42,789 - INFO - apscheduler.scheduler - Added job "check_and_send_compliments" to job store "default"
+2025-07-31 09:01:42,790 - INFO - apscheduler.scheduler - Added job "master_scheduler_task" to job store "default"
+2025-07-31 09:01:42,790 - INFO - apscheduler.scheduler - Scheduler started
+2025-07-31 09:01:42,790 - INFO - root - Планировщик запущен.
+2025-07-31 09:01:43,067 - INFO - aiogram.dispatcher - Start polling
+2025-07-31 09:01:43,115 - INFO - aiogram.dispatcher - Run polling for bot @lovebandi_bot id=7645781389 - 'BandiBot💞'
+2025-07-31 09:01:48,581 - INFO - aiogram.event - Update id=863228817 is handled. Duration 184 ms by bot id=7645781389
+2025-07-31 09:01:55,263 - INFO - aiogram.event - Update id=863228818 is handled. Duration 64 ms by bot id=7645781389
+2025-07-31 09:02:04,714 - INFO - aiogram.event - Update id=863228819 is handled. Duration 71 ms by bot id=7645781389
+2025-07-31 09:02:13,492 - INFO - aiogram.event - Update id=863228820 is handled. Duration 83 ms by bot id=7645781389
+2025-07-31 09:02:17,651 - INFO - aiogram.event - Update id=863228821 is handled. Duration 127 ms by bot id=7645781389
+2025-07-31 09:02:27,577 - INFO - root - Для пары 41961217 добавлено новое воспоминание.
+2025-07-31 09:02:27,673 - INFO - aiogram.event - Update id=863228822 is handled. Duration 119 ms by bot id=7645781389
+2025-07-31 09:02:37,398 - INFO - aiogram.event - Update id=863228823 is handled. Duration 76 ms by bot id=7645781389
+2025-07-31 09:02:42,802 - INFO - apscheduler.executors.default - Running job "check_and_send_compliments (trigger: interval[0:01:00], next run at: 2025-07-31 09:03:42 MSK)" (scheduled at 2025-07-31 09:02:42.788841+03:00)
+2025-07-31 09:02:42,804 - INFO - apscheduler.executors.default - Running job "master_scheduler_task (trigger: interval[0:01:00], next run at: 2025-07-31 09:03:42 MSK)" (scheduled at 2025-07-31 09:02:42.789167+03:00)
+2025-07-31 09:02:42,829 - INFO - apscheduler.executors.default - Job "check_and_send_compliments (trigger: interval[0:01:00], next run at: 2025-07-31 09:03:42 MSK)" executed successfully
+2025-07-31 09:02:42,833 - INFO - apscheduler.executors.default - Job "master_scheduler_task (trigger: interval[0:01:00], next run at: 2025-07-31 09:03:42 MSK)" executed successfully
+2025-07-31 09:02:47,752 - INFO - aiogram.dispatcher - Polling stopped
+2025-07-31 09:02:47,754 - ERROR - aiogram.dispatcher - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2025-07-31 09:02:47,755 - WARNING - aiogram.dispatcher - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7645781389)
+2025-07-31 09:02:48,014 - INFO - apscheduler.scheduler - Scheduler has been shut down
+2025-07-31 09:02:48,015 - INFO - aiogram.dispatcher - Polling stopped for bot @lovebandi_bot id=7645781389 - 'BandiBot💞'
+2025-07-31 09:02:48,018 - INFO - root - Бот остановлен пользователем.

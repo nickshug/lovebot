@@ -1,20 +1,51 @@
 import asyncio
 import logging
+from logging.handlers import TimedRotatingFileHandler  # <-- Изменили импорт
+from datetime import datetime
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import BotCommand
 
-from src.config import BOT_TOKEN
+from src.config import BOT_TOKEN, BASE_DIR
 from src.db import database as db
 from src.handlers import common, pairing, actions, calendar, settings, wishlist, qotd, memories, movies, dates
 from src.utils.scheduler import setup_scheduler
 
+
+def setup_logging():
+    """Настраивает логирование в консоль и в файл с ежедневной ротацией."""
+    log_format = "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+
+    # Создаем папку для логов, если ее нет
+    log_dir = BASE_DIR / "logs"
+    log_dir.mkdir(exist_ok=True)
+
+    # Ротация каждый день в полночь, храним 7 старых файлов
+    # Имя файла будет lovebot.log, а старые будут lovebot.log.YYYY-MM-DD
+    file_handler = TimedRotatingFileHandler(
+        log_dir / "lovebot.log",
+        when='midnight',
+        interval=1,
+        backupCount=7,
+        encoding='utf-8'
+    )
+    file_handler.setFormatter(logging.Formatter(log_format))
+
+    # Настройка корневого логгера
+    logging.basicConfig(
+        level=logging.INFO,
+        format=log_format,
+        handlers=[
+            logging.StreamHandler(),  # Вывод в консоль
+            file_handler  # Запись в файл
+        ]
+    )
+
+
 async def set_main_menu(bot: Bot):
-    """
-    Создает и устанавливает основное меню команд для бота.
-    """
+    """Создает и устанавливает основное меню команд для бота."""
     main_menu_commands = [
         BotCommand(command="/start", description="Перезапустить бота"),
         BotCommand(command="/help", description="Помощь и список команд"),
@@ -37,7 +68,6 @@ async def set_main_menu(bot: Bot):
         BotCommand(command="/memory", description="📸 Случайное воспоминание"),
         BotCommand(command="/allmemories", description="📸 Все воспоминания"),
 
-        # BotCommand(command="/movie", description="🎬 Кинорулетка"),
         BotCommand(command="/addmovie", description="🎬 Добавить фильм в список"),
         BotCommand(command="/watchlist", description="🎬 Список фильмов к просмотру"),
         BotCommand(command="/delmovie", description="🎬 Удалить фильм из списка"),
@@ -50,13 +80,8 @@ async def set_main_menu(bot: Bot):
 
 
 async def main():
-    """
-    Основная функция, которая запускает бота.
-    """
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-    )
+    """Основная функция, которая запускает бота."""
+    setup_logging()
     logging.info("Запускаю бота...")
 
     await db.db_start()
@@ -81,9 +106,7 @@ async def main():
     dp.include_router(movies.router)
     dp.include_router(dates.router)
 
-    # --- УСТАНАВЛИВАЕМ МЕНЮ КОМАНД ---
     await set_main_menu(bot)
-
     await bot.delete_webhook(drop_pending_updates=True)
 
     try:

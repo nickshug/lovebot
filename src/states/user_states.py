@@ -33,6 +33,7 @@ class QOTD(StatesGroup):
 class Memory(StatesGroup):
     waiting_for_media = State()
     waiting_for_description = State()
+    waiting_for_date = State()
 
 class Movie(StatesGroup):
     choosing_genre = State()
