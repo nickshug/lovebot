@@ -37,7 +37,7 @@ async def set_main_menu(bot: Bot):
         BotCommand(command="/memory", description="📸 Случайное воспоминание"),
         BotCommand(command="/allmemories", description="📸 Все воспоминания"),
 
-        BotCommand(command="/movie", description="🎬 Кинорулетка"),
+        # BotCommand(command="/movie", description="🎬 Кинорулетка"),
         BotCommand(command="/addmovie", description="🎬 Добавить фильм в список"),
         BotCommand(command="/watchlist", description="🎬 Список фильмов к просмотру"),
         BotCommand(command="/delmovie", description="🎬 Удалить фильм из списка"),

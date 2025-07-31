@@ -2,8 +2,6 @@ from datetime import datetime
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-
-# --- Клавиатуры для комплиментов ---
 def get_send_time_kb() -> InlineKeyboardMarkup:
     """
     Создает клавиатуру с выбором времени отправки комплимента.
@@ -38,8 +36,6 @@ def get_skip_attachment_kb() -> InlineKeyboardMarkup:
     )
     return builder.as_markup()
 
-
-# --- Клавиатуры для календаря ---
 def get_events_period_kb() -> InlineKeyboardMarkup:
     """Клавиатура для выбора периода просмотра событий."""
     builder = InlineKeyboardBuilder()
@@ -87,8 +83,6 @@ def get_delete_event_kb(events: list, page: int = 0) -> InlineKeyboardMarkup:
 
     return builder.as_markup()
 
-
-# --- Клавиатура для настроек ---
 def get_settings_kb(settings: dict) -> InlineKeyboardMarkup:
     """Клавиатура для меню настроек."""
     builder = InlineKeyboardBuilder()
@@ -104,7 +98,6 @@ def get_settings_kb(settings: dict) -> InlineKeyboardMarkup:
     else:
         builder.row(InlineKeyboardButton(text="🔔 Включить", callback_data="settings_enable"))
 
-    # Блок "Вопрос дня"
     qotd_status = f"Включен ({settings['qotd_send_time']} / {settings['qotd_summary_time']})" if settings[
         'qotd_enabled'] else "Выключен"
     builder.row(InlineKeyboardButton(text=f"Вопрос дня: {qotd_status}", callback_data="noop"))
@@ -277,4 +270,10 @@ def get_confirm_unlink_kb() -> InlineKeyboardMarkup:
         InlineKeyboardButton(text="💔 Да, разорвать", callback_data="confirm_unlink"),
         InlineKeyboardButton(text="❤️ Нет, отмена", callback_data="cancel_unlink")
     )
+    return builder.as_markup()
+
+def get_today_date_kb() -> InlineKeyboardMarkup:
+    """Создает клавиатуру с кнопкой 'Сегодня'."""
+    builder = InlineKeyboardBuilder()
+    builder.row(InlineKeyboardButton(text="🗓️ Сегодня", callback_data="date_today"))
     return builder.as_markup()

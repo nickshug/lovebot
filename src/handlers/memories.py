@@ -7,7 +7,7 @@ from aiogram.types import InputMediaPhoto, InputMediaVideo
 
 from src.db import database as db
 from src.states.user_states import Memory
-from src.keyboards.inline import get_memory_view_kb
+from src.keyboards.inline import get_memory_view_kb, get_today_date_kb
 
 router = Router()
 
@@ -16,8 +16,6 @@ async def get_couple_id(user_id: int):
     partner = await db.get_partner(user_id)
     return min(user_id, partner['user_id']) if partner else None
 
-
-# --- Добавление воспоминания ---
 
 @router.message(Command("addmemory"))
 async def cmd_addmemory(message: types.Message, state: FSMContext):
@@ -36,25 +34,52 @@ async def process_memory_media(message: types.Message, state: FSMContext):
 
     await state.update_data(media_type=media_type, media_file_id=file_id)
     await state.set_state(Memory.waiting_for_description)
-    await message.answer("Отлично! Теперь добавьте описание или цитату к этому моменту.")
+    await message.answer("Отлично! Теперь добавьте описание к этому моменту.")
 
 
 @router.message(Memory.waiting_for_description, F.text)
 async def process_memory_description(message: types.Message, state: FSMContext):
+    await state.update_data(description=message.text)
+    await state.set_state(Memory.waiting_for_date)
+    await message.answer(
+        "На какую дату записать это воспоминание? (ДД.ММ.ГГГГ)\n\n"
+        "Нажмите кнопку или введите дату вручную. Если ничего не отправлять, будет использована текущая дата.",
+        reply_markup=get_today_date_kb()
+    )
+
+
+async def finalize_memory_creation(user_id: int, bot: Bot, state: FSMContext, memory_date: datetime.date):
+    """Общая функция для завершения создания воспоминания."""
     data = await state.get_data()
     await state.clear()
 
-    couple_id = await get_couple_id(message.from_user.id)
+    couple_id = await get_couple_id(user_id)
     await db.add_memory(
         couple_id=couple_id,
         media_type=data['media_type'],
         media_file_id=data['media_file_id'],
-        description=message.text
+        description=data['description'],
+        added_at=memory_date
     )
-    await message.answer("✅ Воспоминание добавлено в вашу капсулу!")
+    await bot.send_message(user_id, "✅ Воспоминание добавлено в вашу капсулу!")
 
 
-# --- Просмотр воспоминаний ---
+@router.message(Memory.waiting_for_date, F.text)
+async def process_memory_date_text(message: types.Message, state: FSMContext):
+    try:
+        memory_date = datetime.strptime(message.text, "%d.%m.%Y").date()
+    except ValueError:
+        await message.answer(
+            "Неверный формат. Пожалуйста, введите дату в формате ДД.ММ.ГГГГ или нажмите кнопку 'Сегодня'.")
+        return
+    await finalize_memory_creation(message.from_user.id, message.bot, state, memory_date)
+
+
+@router.callback_query(Memory.waiting_for_date, F.data == "date_today")
+async def process_memory_date_button(callback: types.CallbackQuery, state: FSMContext):
+    await callback.message.delete()  # Удаляем сообщение с кнопкой
+    await finalize_memory_creation(callback.from_user.id, callback.bot, state, datetime.now().date())
+
 
 @router.message(Command("memory"))
 async def cmd_memory(message: types.Message, state: FSMContext):

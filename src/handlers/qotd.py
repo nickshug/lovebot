@@ -99,15 +99,12 @@ async def cmd_answers(message: types.Message, state: FSMContext):
     await state.clear()
     couple_id = await get_couple_id(message.from_user.id)
     if not couple_id:
-        await message.answer("Эта команда доступна только для пар.")
-        return
+        return await message.answer("Эта команда доступна только для пар.")
 
     archive = await db.get_qotd_archive(couple_id)
     if not archive:
-        await message.answer("Архив ваших ответов пока пуст.\nЕсли хотите новый добавь вопрос /addquestion.")
-        return
+        return await message.answer("Архив ваших ответов пока пуст.\nЕсли хотите новый добавь вопрос /addquestion.")
 
-    # Показываем первую (самую свежую) запись
     page_text = await format_archive_page(archive[0], message.from_user.id)
     await message.answer(
         page_text,
@@ -123,8 +120,7 @@ async def process_archive_page(callback: types.CallbackQuery):
     archive = await db.get_qotd_archive(couple_id)
 
     if page_index >= len(archive) or page_index < 0:
-        await callback.answer("Ошибка навигации.", show_alert=True)
-        return
+        return await callback.answer("Ошибка навигации.", show_alert=True)
 
     page_text = await format_archive_page(archive[page_index], callback.from_user.id)
 
